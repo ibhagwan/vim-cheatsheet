@@ -337,7 +337,7 @@ v<ctrl-a>       " increment digit under the cursor
 
 - A shortcut to the above can be done with the bang `!` operator, this will automatically put is in ex command mode with the visual selection already entered, the equivalent of `:'<,'>!` ready for entering a command, this is useful in many situations, for example to sort a visual block we can just do `viB!sort` which is the equivalent `viB:!sort`. The same can also be done from NORMAL mode using `!iBsort`.
 
-- When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in my [keymap.vim](config/nvim/keymap.vim):
+- When indenting (or any other operation) in VISUAL mode with `<>` you will find that once indented you lose the current selection, to visually reselect the text you can use `gv`, so to indent while keeping current selection use `<gv` and `>gv` respectively. Personally I never want to lose my selection when indenting hence I use the below mappings in [my keymaps](https://github.com/ibhagwan/nvim-lua/blob/main/lua/keymaps.lua):
 
 ```vim
 vmap < <gv
@@ -475,11 +475,62 @@ g&                          " repeat last substitute on all lines
 ```
 
 ### <a id="multiple-files">Multiple Files</a>
+
+> To learn more I recommend watching
+> [Drew Neil: Searching Multiple Files with vimgrep](http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/)
+
 ```vim
-:vimgrep /pattern/ {file} " search for pattern in multiple files
+:vimgrep /pattern/ {file} " search for a pattern using vimgrep
+:grep /pattern/ {file}    " search for a pattern using an external program
 :copen                    " open the 'quickfix` window containing all matches
 :cn                       " jump to the next match
 :cp                       " jump to the previous match
+:cdo                      " execute a command for each quickfix entry
+:cfdo                     " execute a command for each quickfix file
+```
+
+When just starting to use vim search and replace an entire project at first
+seems overly complex, plugins can definitely help here (fzf comes to mind) but
+once you understand how to use the quickfix list it's actually quite easy.
+
+Vim comes builtin with the `vimgrep` utility which searches for a regex patter
+and populates the quickfix list accordingly. From there, you can manipulate
+matches using the `cdo|cfdo` combo.
+
+Searching the project is as easy as:
+```vim
+" search the current file
+:vimgrep /foo/ %
+" search the entire project
+:vimgrep /foo/ **/*
+```
+
+Personally I prefer to use `:grep` in conjunction with the
+[`rg`](https://github.com/BurntSushi/ripgrep) utility, to do so add the below
+to your `init.vim`:
+```vim
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --hidden
+set grepformat=%f:%l:%c:%m
+```
+
+And then run the same search:
+```vim
+" search the current file
+:grep 'foo' %
+" search the entire project
+:grep 'foo'
+" or if you prefer to use the location-list
+:lgrep 'foo'
+```
+
+From here it's very easy to search and replace all matches with
+[any substitute command](#search-replace):
+```vim
+" if you want to run the command once for each entry use `cdo`
+" otherwise the below should suffice as `%s` searches the entire file
+:cfdo %s/foo/bar/g
+" save all changes
+:wall
 ```
 
 ## <a id="macros">Macros</a>
