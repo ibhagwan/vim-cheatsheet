@@ -387,6 +387,7 @@ If we run `di)` we will delete all 3 parameters. However we can also run `d2i(` 
 g# or g*                    " like #, * but also find partial matches
 /pattern                    " search for pattern
 /pattern<ctrl-g>            " go to next match without exiting search mode `/`
+/pattern<ctrl-t>            " go to prev match without exiting search mode `/`
 /pattern/{-+n}              " put cursor {-+n}th line below/above the match
 /pattern/e{-+n}             " put cursor {-+n}th char before/after match (e)nd
 /pattern/b{-+n}             " put cursor {-+n}th char before/after match (b)egin
