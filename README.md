@@ -803,7 +803,7 @@ manual                  " folds must be defined by commands (i.e. `zf`)
 indent                  " folds are defined by lines of equal indent
 expr                    " folds are defined by `foldexpr`
 marker                  " folds are defined by `{{{` and `}}}`
-sytax                   " folds are defined by syntax highlighting
+syntax                  " folds are defined by syntax highlighting
 diff                    " folds are defined by non-modified text
 ```
 
